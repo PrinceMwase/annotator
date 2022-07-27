@@ -17,9 +17,16 @@ import UsersLayout from 'src/layouts/UsersLayout'
 
 import SentencesLayout from 'src/layouts/SentencesLayout'
 
+import MlLayout from 'src/layouts/MlLayout'
+
 const Routes = () => {
   return (
     <Router>
+      <Route path="/about" page={AboutPage} name="about" />
+      <Set wrap={MlLayout}>
+        <Route path="/" page={HomePage} name="home" />
+      </Set>
+
       <Set wrap={TokensLayout}>
         <Route path="/tokens/new" page={TokenNewTokenPage} name="newToken" />
         <Route path="/tokens/{id:Int}/edit" page={TokenEditTokenPage} name="editToken" />
