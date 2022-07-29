@@ -47,7 +47,7 @@ model Token {
   id         Int      @id @default(autoincrement())
   token      String
   index      Int
-  pos        String?
+  pos        UPOS?
   head       Int?
   deprel     String?
   sentence   Sentence @relation(fields: [sentenceId], references: [id])
@@ -69,4 +69,24 @@ enum PROGRESS {
   STEMMING
   STEMMED
   RAW
+}
+
+enum UPOS {
+  ADJ
+  ADP
+  ADV
+  AUX
+  CCONJ
+  DET
+  INTJ
+  NOUN
+  NUM
+  PART
+  PRON
+  PROPN
+  PUNCT
+  SCONJ
+  SYM
+  VERB
+  X
 }

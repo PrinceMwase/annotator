@@ -1,5 +1,6 @@
 import type { FindSubjectQuery, FindSubjectQueryVariables } from 'types/graphql'
 import type { CellSuccessProps, CellFailureProps } from '@redwoodjs/web'
+import Subject from 'src/components/Subject/Subject'
 
 export const QUERY = gql`
   query FindSubjectQuery {
@@ -7,6 +8,9 @@ export const QUERY = gql`
       sentence
       Token{
       token
+      index
+      pos
+
     }}
   }
 `
@@ -24,5 +28,5 @@ export const Failure = ({
 export const Success = ({
   subject,
 }: CellSuccessProps<FindSubjectQuery, FindSubjectQueryVariables>) => {
-  return <div>{JSON.stringify(subject)}</div>
+  return <Subject subject={subject}/>
 }

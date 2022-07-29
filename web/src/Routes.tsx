@@ -22,8 +22,8 @@ import MlLayout from 'src/layouts/MlLayout'
 const Routes = () => {
   return (
     <Router>
-      <Route path="/about" page={AboutPage} name="about" />
       <Set wrap={MlLayout}>
+        <Route path="/about" page={AboutPage} name="about" />
         <Route path="/" page={HomePage} name="home" />
       </Set>
 
