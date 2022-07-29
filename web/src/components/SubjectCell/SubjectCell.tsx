@@ -7,6 +7,7 @@ export const QUERY = gql`
     subject{
       sentence
       Token{
+        id
       token
       index
       pos
