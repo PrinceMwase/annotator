@@ -27,11 +27,16 @@ const UPOS = {
   X: 'other',
 }
 
+
 interface Props {
   subject: { sentence: String; Token: Token[] }
 }
 
 const Subject = ({ subject }: Props) => {
+
+
+  const [tags, setTags] = useState([])
+
   const [thisToken, setToken] = React.useState()
 
   const [pos, setPos] = useState()
@@ -70,6 +75,17 @@ const Subject = ({ subject }: Props) => {
         thisToken.classList.remove('text-lg')
       }
     }
+
+
+    if (tags.length === 0) {
+      let getTags=[];
+      Object.entries(UPOS).forEach(([key, value]) => {
+        getTags.push(key)
+      });
+      console.log(getTags);
+
+      setTags(getTags)
+    }
   }
 
   return (
@@ -100,6 +116,14 @@ const Subject = ({ subject }: Props) => {
               </div>
             ))}
           </div>
+          <ul className="list-none">
+            {
+              tags.length > 0 ? tags.map( x => <li key={x}> {x} </li>)
+              : (<li>empty</li>)
+
+            }
+
+          </ul>
         </div>
       </div>
     </div>
