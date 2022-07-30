@@ -166,6 +166,10 @@ const Subject = ({ subject }: Props) => {
             </div>
           </div>
 
+          {/* sumbit token */}
+
+          <button className="btn btn-active btn-accent my-20">Button</button>
+
           {/* Universal parts of speech */}
           <ul className="list-none py-10">
             {tags.length > 0 ? (
