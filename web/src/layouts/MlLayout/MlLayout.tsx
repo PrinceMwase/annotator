@@ -1,5 +1,5 @@
 import { Link, routes } from '@redwoodjs/router'
-
+import { Toaster } from '@redwoodjs/web/toast'
 type MlLayoutProps = {
   children?: React.ReactNode
 }
@@ -7,6 +7,7 @@ type MlLayoutProps = {
 const MlLayout = ({ children }: MlLayoutProps) => {
   return (
     <>
+      <Toaster />
       <header>
         <div className="navbar bg-base-100">
           <div className="flex-1">
@@ -27,7 +28,6 @@ const MlLayout = ({ children }: MlLayoutProps) => {
         </div>
       </header>
       <main>{children}</main>
-
     </>
   )
 }

@@ -1,4 +1,18 @@
 import { useState } from 'react'
+import { toast } from '@redwoodjs/web/toast'
+import {
+  Form,
+  FormError,
+  Label,
+  TextField,
+  TextAreaField,
+  NumberField,
+  Submit,
+  FieldError,
+  SubmitHandler,
+} from '@redwoodjs/forms'
+import { QUERY as SubjectQuery } from 'src/components/SubjectCell'
+import { useMutation } from '@redwoodjs/web'
 
 interface Token {
   id: React.Key
@@ -31,10 +45,88 @@ interface Props {
   subject: { sentence: String; Token: Token[] }
 }
 
+const CREATE = gql`
+  mutation CREATE($input: CreateTokenInput!) {
+    createToken(input: $input) {
+      token
+      pos
+      sentence {
+        id
+      }
+    }
+  }
+`
+
+const UPDATE = gql`
+  mutation UPDATE($id: Int!, $input: UpdateTokenInput!){
+    updateToken(id: $id, input: $input) {
+      token
+      pos
+      sentence {
+        id
+      }
+    }
+  }
+`
+
+interface CreateValues {
+  token: string
+  index: number
+  sentenceId: string
+}
+
+interface UpdateValues {
+  token: string
+}
+
 const Subject = ({ subject }: Props) => {
+  const [newIndex, setnewIndex] = useState(0)
+
+  const [createToken, { loading, error }] = useMutation(CREATE, {
+    onCompleted: () => {
+      toast.success('branched a new token')
+
+      // run if no error in branching
+      if(!error)
+      updateToken(
+        {
+          variables: {
+            id: thisToken ? parseInt( thisToken.dataset.key) : 0,
+            input: {
+              token: breaks.length > 0 ? breaks[0] : ''
+            }
+          }
+        }
+      )
+
+    },
+  })
+  const [updateToken] = useMutation(UPDATE, {
+    onCompleted: () => {
+      toast.success('updated token')
+    },
+    refetchQueries: [{query:SubjectQuery}]
+  })
+
+  const onSubmit: SubmitHandler<CreateValues> = (input) => {
+    if(!loading)
+    createToken({
+      variables: {
+        input: {
+          token: breaks.length > 0 ? breaks[1] : '',
+          index: newIndex,
+          sentenceId: subject.id,
+          pos: pos || ''
+        },
+      },
+    })
+
+    // get the id
+
+
+  }
 
   const [breaks, setbreaks] = useState([])
-
 
   // store parts of speech
   const [tags, setTags] = useState([])
@@ -66,8 +158,12 @@ const Subject = ({ subject }: Props) => {
 
   const limiterClicked = (event: { target: { value: any } }) => {
     const limit = event.target.value
+    const left = word.slice(0, limit)
+    setbreaks([left, word.slice(limit)])
 
-    setbreaks([word.slice(0, limit), word.slice(limit)])
+    if (thisToken) {
+      setnewIndex(left.length + parseInt(thisToken.id))
+    }
   }
 
   const tokenClicked = (event: { target: any }) => {
@@ -77,8 +173,9 @@ const Subject = ({ subject }: Props) => {
     event.target.classList.add('text-lg')
     setToken(event.target)
 
-    const word_index = event.target.id
 
+    const word_index = event.target.id
+    setnewIndex(word_index)
     let right_words = sentence.slice(word_index)
 
     const left_words = sentence.slice(0, word_index)
@@ -133,6 +230,7 @@ const Subject = ({ subject }: Props) => {
                 className="badge badge-outline cursor-pointer "
                 onClick={tokenClicked}
                 key={token.id}
+                data-key={token.id}
                 id={token.index.toString()}
               >
                 {token.token}
@@ -154,21 +252,35 @@ const Subject = ({ subject }: Props) => {
           </div> */}
 
           {/* Show Broken words */}
-          <div className="flex w-full tooltip tooltip-open tooltip-bottom  " data-tip="use the slider to slice token">
-
+          <div
+            className="flex w-full tooltip tooltip-open tooltip-bottom  "
+            data-tip="use the slider to slice token"
+          >
             <div className="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">
-              {breaks.length > 0 ? breaks[0] : "nothing to show"}
-
+              {breaks.length > 0 ? breaks[0] : 'nothing to show'}
             </div>
             <div className="divider divider-horizontal">and</div>
             <div className="grid h-20 flex-grow card bg-base-300 rounded-box place-items-center">
-            {breaks.length > 0 ? breaks[1] : "nothing to show"}
+              {breaks.length > 0 ? breaks[1] : 'nothing to show'}
             </div>
           </div>
 
           {/* sumbit token */}
 
-          <button className="btn btn-active btn-accent my-20">Button</button>
+          <Form className="my-20" onSubmit={onSubmit}>
+            <FormError error={error} />
+            <NumberField name="index" readOnly hidden value={newIndex} />
+            <NumberField name="sentenceId" hidden readOnly value={subject.id} />
+            <TextField
+hidden
+              name="token"
+              readOnly
+              value={breaks.length > 0 ? breaks[1] : ''}
+            />
+            <FieldError name="token" className="error-message" />
+            <br />
+            <Submit className="btn btn-outline btn-accent" disabled={breaks.length > 0 && breaks[0].length > 0 && breaks[1].length > 0? false : true} >break Token</Submit>
+          </Form>
 
           {/* Universal parts of speech */}
           <ul className="list-none py-10">

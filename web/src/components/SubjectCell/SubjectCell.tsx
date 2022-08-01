@@ -5,6 +5,7 @@ import Subject from 'src/components/Subject/Subject'
 export const QUERY = gql`
   query FindSubjectQuery {
     subject{
+      id
       sentence
       Token{
         id

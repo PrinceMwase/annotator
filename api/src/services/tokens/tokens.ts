@@ -5,9 +5,14 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import { validate } from '@redwoodjs/api'
 
 export const tokens: QueryResolvers['tokens'] = () => {
-  return db.token.findMany()
+  return db.token.findMany(
+    {orderBy: {
+      index: 'asc',
+    }}
+  )
 }
 
 export const token: QueryResolvers['token'] = ({ id }) => {
@@ -17,6 +22,14 @@ export const token: QueryResolvers['token'] = ({ id }) => {
 }
 
 export const createToken: MutationResolvers['createToken'] = ({ input }) => {
+
+  validate(input.token , 'token', {
+    length: {
+      min:1,
+      message: "please use the slider to adjust"
+    }
+  })
+
   return db.token.create({
     data: input,
   })
@@ -26,6 +39,14 @@ export const updateToken: MutationResolvers['updateToken'] = ({
   id,
   input,
 }) => {
+
+  validate(input.token , 'token', {
+    length: {
+      min:1,
+      message: "please use the slider to adjust"
+    }
+  })
+
   return db.token.update({
     data: input,
     where: { id },

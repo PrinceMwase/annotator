@@ -13,6 +13,13 @@ export const sentences: QueryResolvers['sentences'] = () => {
 export const sentence: QueryResolvers['sentence'] = ({ id }) => {
   return db.sentence.findUnique({
     where: { id },
+    include: {
+      Token:{
+        orderBy: {
+          index: 'asc'
+        }
+      }
+    }
   })
 }
 export const subject = () => {
@@ -28,6 +35,13 @@ export const subject = () => {
         }
        ]
       },
+      include: {
+        Token:{
+          orderBy: {
+            index: 'asc'
+          }
+        }
+      }
   })
 
 }
@@ -62,5 +76,9 @@ export const Sentence: SentenceResolvers = {
   modifier: (_obj, { root }) =>
     db.sentence.findUnique({ where: { id: root.id } }).modifier(),
   Token: (_obj, { root }) =>
-    db.sentence.findUnique({ where: { id: root.id } }).Token(),
+    db.sentence.findUnique({ where: { id: root.id }, }).Token({
+      orderBy:{
+        index: "asc"
+      }
+    }),
 }
