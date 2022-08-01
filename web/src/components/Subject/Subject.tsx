@@ -13,6 +13,7 @@ import {
 } from '@redwoodjs/forms'
 import { QUERY as SubjectQuery } from 'src/components/SubjectCell'
 import { useMutation } from '@redwoodjs/web'
+import UposForm from 'src/components/UposForm/UposForm'
 
 interface Token {
   id: React.Key
@@ -267,7 +268,7 @@ const Subject = ({ subject }: Props) => {
 
           {/* sumbit token */}
 
-          <Form className="my-20" onSubmit={onSubmit}>
+          <Form className="my-5" onSubmit={onSubmit}>
             <FormError error={error} />
             <NumberField name="index" readOnly hidden value={newIndex} />
             <NumberField name="sentenceId" hidden readOnly value={subject.id} />
@@ -279,27 +280,11 @@ hidden
             />
             <FieldError name="token" className="error-message" />
             <br />
-            <Submit className="btn btn-outline btn-accent" disabled={breaks.length > 0 && breaks[0].length > 0 && breaks[1].length > 0? false : true} >break Token</Submit>
+            <Submit className="btn btn-outline btn-accent w-full max-w-xs" disabled={breaks.length > 0 && breaks[0].length > 0 && breaks[1].length > 0? false : true} >break Token</Submit>
           </Form>
 
           {/* Universal parts of speech */}
-          <ul className="list-none py-10">
-            {tags.length > 0 ? (
-              tags.map((x) => (
-                <li
-                  className={
-                    pos === x ? 'text-purple-700' : 'dark:text-yellow-400'
-                  }
-                  key={x}
-                >
-                  {' '}
-                  {x}{' '}
-                </li>
-              ))
-            ) : (
-              <li>empty</li>
-            )}
-          </ul>
+            {<UposForm id={thisToken ? thisToken.id : 0} pos={pos} tags={tags} />}
         </div>
       </div>
     </div>
