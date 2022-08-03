@@ -40,6 +40,7 @@ export const updateToken: MutationResolvers['updateToken'] = ({
   input,
 }) => {
 
+  if(input.token )
   validate(input.token , 'token', {
     length: {
       min:1,
