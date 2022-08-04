@@ -12,16 +12,19 @@ generator client {
 // to create migrations for them and apply to your dev DB.
 // TODO: Please remove the following example:
 model User {
-  id           Int        @id @default(autoincrement())
-  phone_number String     @unique
-  email        String     @unique
-  name         String?
-  role         Role       @default(INACTIVE)
-  profile      Profile?
-  password     String
-  createdAt    DateTime   @default(now())
-  sentences    Sentence[]
-  modifier     Sentence[] @relation("modifier")
+  id                  Int        @id @default(autoincrement())
+  phone_number        String     @unique
+  email               String     @unique
+  name                String?
+  role                Role       @default(INACTIVE)
+  profile             Profile?
+  hashedPassword      String     @default("")
+  salt                String     @default("")
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  createdAt           DateTime   @default(now())
+  sentences           Sentence[]
+  modifier            Sentence[] @relation("modifier")
 }
 
 model Profile {

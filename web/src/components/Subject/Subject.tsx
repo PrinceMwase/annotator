@@ -170,9 +170,11 @@ const Subject = ({ subject }: Props) => {
   const tokenClicked = (event: { target: any }) => {
 
     if(!event)
-    return false
+      return false
     setbreaks([])
+
     setPos(event.target.dataset.pos)
+
     const raw_token = event.target.innerText
     event.target.classList.add('text-lg')
     setToken(event.target)
