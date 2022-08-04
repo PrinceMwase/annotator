@@ -9,11 +9,11 @@
 
 import { Set, Router, Route, Private } from '@redwoodjs/router'
 
+import UsersLayout from 'src/layouts/UsersLayout'
+
 import TokensLayout from 'src/layouts/TokensLayout'
 
 import ProfilesLayout from 'src/layouts/ProfilesLayout'
-
-import UsersLayout from 'src/layouts/UsersLayout'
 
 import SentencesLayout from 'src/layouts/SentencesLayout'
 
@@ -31,7 +31,16 @@ const Routes = () => {
         <Route path="/" page={HomePage} name="home" />
       </Set>
 
-      <Private unauthenticated="home">
+      <Private unauthenticated="home" roles="SUPER">
+        <Set wrap={UsersLayout}>
+          <Route path="/users/new" page={UserNewUserPage} name="newUser" />
+
+          <Route path="/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
+
+          <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
+
+          <Route path="/users" page={UserUsersPage} name="users" />
+        </Set>
         <Set wrap={TokensLayout}>
           <Route path="/tokens/new" page={TokenNewTokenPage} name="newToken" />
           <Route path="/tokens/{id:Int}/edit" page={TokenEditTokenPage} name="editToken" />
@@ -44,12 +53,7 @@ const Routes = () => {
           <Route path="/profiles/{id:Int}" page={ProfileProfilePage} name="profile" />
           <Route path="/profiles" page={ProfileProfilesPage} name="profiles" />
         </Set>
-        <Set wrap={UsersLayout}>
-          <Route path="/users/new" page={UserNewUserPage} name="newUser" />
-          <Route path="/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
-          <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
-          <Route path="/users" page={UserUsersPage} name="users" />
-        </Set>
+
         <Set wrap={SentencesLayout}>
           <Route path="/sentences/new" page={SentenceNewSentencePage} name="newSentence" />
           <Route path="/sentences/{id:Int}/edit" page={SentenceEditSentencePage} name="editSentence" />

@@ -4,9 +4,12 @@ export const schema = gql`
     phone_number: String!
     email: String!
     name: String
-    role: Role!
+    roles: Role!
     profile: Profile
-    password: String!
+    hashedPassword: String!
+    salt: String!
+    resetToken: String
+    resetTokenExpiresAt: DateTime
     createdAt: DateTime!
     sentences: [Sentence]!
     modifier: [Sentence]!
@@ -29,16 +32,22 @@ export const schema = gql`
     phone_number: String!
     email: String!
     name: String
-    role: Role!
-    password: String!
+    roles: Role!
+    hashedPassword: String!
+    salt: String!
+    resetToken: String
+    resetTokenExpiresAt: DateTime
   }
 
   input UpdateUserInput {
     phone_number: String
     email: String
     name: String
-    role: Role
-    password: String
+    roles: Role
+    hashedPassword: String
+    salt: String
+    resetToken: String
+    resetTokenExpiresAt: DateTime
   }
 
   type Mutation {

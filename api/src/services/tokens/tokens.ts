@@ -6,6 +6,8 @@ import type {
 
 import { db } from 'src/lib/db'
 import { validate } from '@redwoodjs/api'
+import { requireAuth } from 'src/lib/auth'
+import { updateSentence } from 'src/services/sentences/sentences'
 
 export const tokens: QueryResolvers['tokens'] = () => {
   return db.token.findMany(
@@ -22,6 +24,8 @@ export const token: QueryResolvers['token'] = ({ id }) => {
 }
 
 export const createToken: MutationResolvers['createToken'] = ({ input }) => {
+
+  requireAuth({roles: 'STEMMER' })
 
   validate(input.token , 'token', {
     length: {
@@ -40,6 +44,10 @@ export const updateToken: MutationResolvers['updateToken'] = ({
   input,
 }) => {
 
+
+
+  requireAuth({roles: 'STEMMER' })
+
   if(input.token )
   validate(input.token , 'token', {
     length: {
@@ -47,6 +55,8 @@ export const updateToken: MutationResolvers['updateToken'] = ({
       message: "please use the slider to adjust"
     }
   })
+
+
 
   return db.token.update({
     data: input,

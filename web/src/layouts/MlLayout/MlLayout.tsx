@@ -24,12 +24,13 @@ const MlLayout = ({ children }: MlLayoutProps) => {
           <div className="flex-none">
             <ul className="menu menu-horizontal p-0">
               {isAuthenticated ? (
-                <div>
-                  <span>Logged in as {currentUser.email}</span>{' '}
-                  <button type="button" onClick={logOut}>
-                    Logout
-                  </button>
-                </div>
+                <li>
+                  <div>
+                    <button type="button" onClick={logOut}>
+                      Logout
+                    </button>
+                  </div>
+                </li>
               ) : (
                 <li>
                   <Link to={routes.login()}>Login</Link>

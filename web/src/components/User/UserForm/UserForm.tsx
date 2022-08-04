@@ -5,14 +5,30 @@ import {
   Label,
   TextField,
   RadioField,
+  DatetimeLocalField,
   Submit,
 } from '@redwoodjs/forms'
 
+
+const formatDatetime = (value) => {
+  if (value) {
+    return value.replace(/:\d{2}\.\d{3}\w/, '')
+  }
+}
 
 
 const UserForm = (props) => {
   const onSubmit = (data) => {
 
+  
+    
+    
+  
+    
+    
+  
+    
+    
   
     
     
@@ -99,21 +115,21 @@ const UserForm = (props) => {
         <FieldError name="name" className="rw-field-error" />
 
         <Label
-          name="role"
+          name="roles"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          Role
+          Roles
         </Label>
         
           
           
         <div className="rw-check-radio-items">
           <RadioField
-            id="user-role-0"
-            name="role"
+            id="user-roles-0"
+            name="roles"
             defaultValue="STEMMER"
-            defaultChecked={props.user?.role?.includes('STEMMER')}
+            defaultChecked={props.user?.roles?.includes('STEMMER')}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
           />
@@ -124,10 +140,10 @@ const UserForm = (props) => {
           
         <div className="rw-check-radio-items">
           <RadioField
-            id="user-role-1"
-            name="role"
+            id="user-roles-1"
+            name="roles"
             defaultValue="VERIFIER"
-            defaultChecked={props.user?.role?.includes('VERIFIER')}
+            defaultChecked={props.user?.roles?.includes('VERIFIER')}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
           />
@@ -138,10 +154,10 @@ const UserForm = (props) => {
           
         <div className="rw-check-radio-items">
           <RadioField
-            id="user-role-2"
-            name="role"
+            id="user-roles-2"
+            name="roles"
             defaultValue="ANNOTATOR"
-            defaultChecked={props.user?.role?.includes('ANNOTATOR')}
+            defaultChecked={props.user?.roles?.includes('ANNOTATOR')}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
           />
@@ -152,10 +168,10 @@ const UserForm = (props) => {
           
         <div className="rw-check-radio-items">
           <RadioField
-            id="user-role-3"
-            name="role"
+            id="user-roles-3"
+            name="roles"
             defaultValue="INACTIVE"
-            defaultChecked={props.user?.role?.includes('INACTIVE')}
+            defaultChecked={props.user?.roles?.includes('INACTIVE')}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
           />
@@ -166,10 +182,10 @@ const UserForm = (props) => {
           
         <div className="rw-check-radio-items">
           <RadioField
-            id="user-role-4"
-            name="role"
+            id="user-roles-4"
+            name="roles"
             defaultValue="SUPER"
-            defaultChecked={props.user?.role?.includes('SUPER')}
+            defaultChecked={props.user?.roles?.includes('SUPER')}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
           />
@@ -180,26 +196,81 @@ const UserForm = (props) => {
           
         
 
-        <FieldError name="role" className="rw-field-error" />
+        <FieldError name="roles" className="rw-field-error" />
 
         <Label
-          name="password"
+          name="hashedPassword"
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          Password
+          Hashed password
         </Label>
         
           <TextField
-            name="password"
-            defaultValue={props.user?.password}
+            name="hashedPassword"
+            defaultValue={props.user?.hashedPassword}
             className="rw-input"
             errorClassName="rw-input rw-input-error"
             validation={{ required: true }}
           />
         
 
-        <FieldError name="password" className="rw-field-error" />
+        <FieldError name="hashedPassword" className="rw-field-error" />
+
+        <Label
+          name="salt"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Salt
+        </Label>
+        
+          <TextField
+            name="salt"
+            defaultValue={props.user?.salt}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            validation={{ required: true }}
+          />
+        
+
+        <FieldError name="salt" className="rw-field-error" />
+
+        <Label
+          name="resetToken"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Reset token
+        </Label>
+        
+          <TextField
+            name="resetToken"
+            defaultValue={props.user?.resetToken}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+        
+
+        <FieldError name="resetToken" className="rw-field-error" />
+
+        <Label
+          name="resetTokenExpiresAt"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Reset token expires at
+        </Label>
+        
+          <DatetimeLocalField
+            name="resetTokenExpiresAt"
+            defaultValue={formatDatetime(props.user?.resetTokenExpiresAt)}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          />
+        
+
+        <FieldError name="resetTokenExpiresAt" className="rw-field-error" />
 
         <div className="rw-button-group">
           <Submit

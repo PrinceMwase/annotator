@@ -83,11 +83,20 @@ const User = ({ user }) => {
               <th>Name</th>
               <td>{user.name}</td>
             </tr><tr>
-              <th>Role</th>
-              <td>{formatEnum(user.role)}</td>
+              <th>Roles</th>
+              <td>{formatEnum(user.roles)}</td>
             </tr><tr>
-              <th>Password</th>
-              <td>{user.password}</td>
+              <th>Hashed password</th>
+              <td>{user.hashedPassword}</td>
+            </tr><tr>
+              <th>Salt</th>
+              <td>{user.salt}</td>
+            </tr><tr>
+              <th>Reset token</th>
+              <td>{user.resetToken}</td>
+            </tr><tr>
+              <th>Reset token expires at</th>
+              <td>{timeTag(user.resetTokenExpiresAt)}</td>
             </tr><tr>
               <th>Created at</th>
               <td>{timeTag(user.createdAt)}</td>

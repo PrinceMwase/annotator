@@ -14,8 +14,11 @@ export const QUERY = gql`
       phone_number
       email
       name
-      role
-      password
+      roles
+      hashedPassword
+      salt
+      resetToken
+      resetTokenExpiresAt
       createdAt
     }
   }
@@ -27,8 +30,11 @@ const UPDATE_USER_MUTATION = gql`
       phone_number
       email
       name
-      role
-      password
+      roles
+      hashedPassword
+      salt
+      resetToken
+      resetTokenExpiresAt
       createdAt
     }
   }

@@ -5,6 +5,7 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import { requireAuth } from 'src/lib/auth'
 
 export const sentences: QueryResolvers['sentences'] = () => {
   return db.sentence.findMany()
@@ -23,12 +24,13 @@ export const sentence: QueryResolvers['sentence'] = ({ id }) => {
   })
 }
 export const subject = () => {
+  requireAuth({roles: ['STEMMER']})
   return db.sentence.findFirst({
     where: {
        OR:[
         {
           progress: "STEMMING",
-          modifierId:2
+          modifierId:context.currentUser.id
         },
         {
           progress: "RAW"

@@ -58,8 +58,8 @@ const CREATE = gql`
   }
 `
 
-const UPDATE = gql`
-  mutation UPDATE($id: Int!, $input: UpdateTokenInput!){
+const UPDATETOKEN = gql`
+  mutation UPDATETOKEN($id: Int!, $input: UpdateTokenInput!){
     updateToken(id: $id, input: $input) {
       token
       pos
@@ -102,7 +102,7 @@ const Subject = ({ subject }: Props) => {
 
     },
   })
-  const [updateToken] = useMutation(UPDATE, {
+  const [updateToken] = useMutation(UPDATETOKEN, {
     onCompleted: () => {
       toast.success('updated token')
     },
