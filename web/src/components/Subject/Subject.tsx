@@ -14,7 +14,7 @@ import {
 import { QUERY as SubjectQuery } from 'src/components/SubjectCell'
 import { useMutation } from '@redwoodjs/web'
 import UposForm from 'src/components/UposForm/UposForm'
-
+import { useAuth } from '@redwoodjs/auth'
 interface Token {
   id: React.Key
   token: String
@@ -43,7 +43,12 @@ const UPOS = {
 }
 
 interface Props {
-  subject: { sentence: String; Token: Token[] }
+  subject: {
+    sentence: String
+    Token: Token[]
+    progress: string
+    id: any
+  }
 }
 
 const CREATE = gql`
@@ -59,13 +64,21 @@ const CREATE = gql`
 `
 
 const UPDATETOKEN = gql`
-  mutation UPDATETOKEN($id: Int!, $input: UpdateTokenInput!){
+  mutation UPDATETOKEN($id: Int!, $input: UpdateTokenInput!) {
     updateToken(id: $id, input: $input) {
       token
       pos
       sentence {
         id
       }
+    }
+  }
+`
+
+const UPDATESENTENCE = gql`
+  mutation UPDATESENTENCE($id: Int!, $input: UpdateSentenceInput!) {
+    updateSentence(id: $id, input: $input) {
+      id
     }
   }
 `
@@ -81,50 +94,84 @@ interface UpdateValues {
 }
 
 const Subject = ({ subject }: Props) => {
+
+  // hook to verify for submission
+  const [clickedBreak, setclickedBreak] = useState(false)
+  const [clickedFinalize, setclickedFinalize] = useState(false)
+
+
+
+  //the token's position on the sentence
   const [newIndex, setnewIndex] = useState(0)
+
+  const [updateSentence] = useMutation(UPDATESENTENCE, {
+    onCompleted: () => {
+      toast.success('submitted')
+      setclickedFinalize(false)
+    },
+    refetchQueries: [{ query: SubjectQuery }],
+  })
 
   const [createToken, { loading, error }] = useMutation(CREATE, {
     onCompleted: () => {
       toast.success('branched a new token')
-
+      setclickedFinalize(false)
       // run if no error in branching
-      if(!error)
-      updateToken(
-        {
+      if (!error)
+        updateToken({
           variables: {
-            id: thisToken ? parseInt( thisToken.dataset.key) : 0,
+            id: thisToken ? parseInt(thisToken.dataset.key) : 0,
             input: {
-              token: breaks.length > 0 ? breaks[0] : ''
-            }
-          }
-        }
-      )
-
+              token: breaks.length > 0 ? breaks[0] : '',
+            },
+          },
+        })
     },
   })
   const [updateToken] = useMutation(UPDATETOKEN, {
     onCompleted: () => {
       toast.success('updated token')
+      setclickedFinalize(false)
     },
-    refetchQueries: [{query:SubjectQuery}]
+    refetchQueries: [{ query: SubjectQuery }],
   })
 
   const onSubmit: SubmitHandler<CreateValues> = (input) => {
-    if(!loading)
-    createToken({
-      variables: {
-        input: {
-          token: breaks.length > 0 ? breaks[1] : '',
-          index: newIndex,
-          sentenceId: subject.id,
-          pos: pos || ''
+    setclickedFinalize(false)
+    if (!loading)
+      createToken({
+        variables: {
+          input: {
+            token: breaks.length > 0 ? breaks[1] : '',
+            index: newIndex,
+            sentenceId: subject.id,
+            pos: pos || '',
+          },
         },
-      },
-    })
+      })
 
     // get the id
+  }
 
+  // set the sentence as stemmed
+  const { isAuthenticated, currentUser } = useAuth()
+  const finalize: SubmitHandler<CreateValues> = () => {
 
+    if(!clickedFinalize){
+      return setclickedFinalize(true)
+    }
+
+    if (isAuthenticated && subject.progress === 'STEMMING' && !loading) {
+      updateSentence({
+        variables: {
+          id: subject.id,
+          input: {
+            progress: 'STEMMED',
+            modifierId: currentUser.id,
+          },
+        },
+      })
+    }
   }
 
   const [breaks, setbreaks] = useState([])
@@ -136,7 +183,7 @@ const Subject = ({ subject }: Props) => {
   const [thisToken, setToken] = React.useState()
 
   // The current part of speech of the token
-  const [pos, setPos] = useState("")
+  const [pos, setPos] = useState('')
 
   // store the subject
   const [sentence, setSentence] = React.useState(subject.sentence)
@@ -158,6 +205,7 @@ const Subject = ({ subject }: Props) => {
    */
 
   const limiterClicked = (event: { target: { value: any } }) => {
+    setclickedFinalize(false)
     const limit = event.target.value
     const left = word.slice(0, limit)
     setbreaks([left, word.slice(limit)])
@@ -168,9 +216,8 @@ const Subject = ({ subject }: Props) => {
   }
 
   const tokenClicked = (event: { target: any }) => {
-
-    if(!event)
-      return false
+    setclickedFinalize(false)
+    if (!event) return false
     setbreaks([])
 
     setPos(event.target.dataset.pos)
@@ -178,7 +225,6 @@ const Subject = ({ subject }: Props) => {
     const raw_token = event.target.innerText
     event.target.classList.add('text-lg')
     setToken(event.target)
-
 
     const word_index = event.target.id
     setnewIndex(word_index)
@@ -279,18 +325,41 @@ const Subject = ({ subject }: Props) => {
             <NumberField name="index" readOnly hidden value={newIndex} />
             <NumberField name="sentenceId" hidden readOnly value={subject.id} />
             <TextField
-hidden
+              hidden
               name="token"
               readOnly
               value={breaks.length > 0 ? breaks[1] : ''}
             />
             <FieldError name="token" className="error-message" />
             <br />
-            <Submit className="btn btn-outline btn-accent w-full max-w-xs" disabled={breaks.length > 0 && breaks[0].length > 0 && breaks[1].length > 0? false : true} >break Token</Submit>
+            <Submit
+              className="btn btn-outline btn-accent w-full max-w-xs"
+              disabled={
+                breaks.length > 0 &&
+                breaks[0].length > 0 &&
+                breaks[1].length > 0
+                  ? false
+                  : true
+              }
+            >
+              break Token
+            </Submit>
           </Form>
 
           {/* Universal parts of speech */}
-            { thisToken && breaks.length <= 0 && <UposForm   id={thisToken ? thisToken.dataset.key : 0} pos={pos} tags={tags} />}
+          {thisToken && breaks.length <= 0 && (
+            <UposForm
+              id={thisToken ? thisToken.dataset.key : 0}
+              pos={pos}
+              tags={tags}
+            />
+          )}
+
+          <Form className="my-5" onSubmit={finalize}>
+            <Submit className="btn btn-outline w-full max-w-xs">
+              {clickedFinalize ? "Click again to verify" : "Submit"}
+            </Submit>
+          </Form>
         </div>
       </div>
     </div>
