@@ -1,10 +1,13 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Toaster } from '@redwoodjs/web/toast'
+import { useAuth } from '@redwoodjs/auth'
 type MlLayoutProps = {
   children?: React.ReactNode
 }
 
 const MlLayout = ({ children }: MlLayoutProps) => {
+  const { isAuthenticated, currentUser, logOut } = useAuth()
+
   return (
     <>
       <Toaster />
@@ -20,6 +23,18 @@ const MlLayout = ({ children }: MlLayoutProps) => {
           </div>
           <div className="flex-none">
             <ul className="menu menu-horizontal p-0">
+              {isAuthenticated ? (
+                <div>
+                  <span>Logged in as {currentUser.email}</span>{' '}
+                  <button type="button" onClick={logOut}>
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <li>
+                  <Link to={routes.login()}>Login</Link>
+                </li>
+              )}
               <li>
                 <Link to={routes.about()}>About</Link>
               </li>
