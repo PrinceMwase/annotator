@@ -136,7 +136,7 @@ const Subject = ({ subject }: Props) => {
   const [thisToken, setToken] = React.useState()
 
   // The current part of speech of the token
-  const [pos, setPos] = useState()
+  const [pos, setPos] = useState("")
 
   // store the subject
   const [sentence, setSentence] = React.useState(subject.sentence)
@@ -290,7 +290,7 @@ hidden
           </Form>
 
           {/* Universal parts of speech */}
-            { thisToken && <UposForm id={thisToken ? thisToken.dataset.key : 0} pos={pos} tags={tags} />}
+            { thisToken && breaks.length <= 0 && <UposForm   id={thisToken ? thisToken.dataset.key : 0} pos={pos} tags={tags} />}
         </div>
       </div>
     </div>
