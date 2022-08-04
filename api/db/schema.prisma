@@ -13,6 +13,7 @@ generator client {
 // TODO: Please remove the following example:
 model User {
   id                  Int        @id @default(autoincrement())
+  phone_number        String     @default("")
   email               String     @unique
   name                String?
   role                Role       @default(INACTIVE)
