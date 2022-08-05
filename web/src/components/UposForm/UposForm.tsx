@@ -96,8 +96,8 @@ const UposForm = (props: PROPS) => {
           )}
 
         </SelectField>
-        <Submit className="btn btn-outline btn-accent my-1 w-full max-w-xs">
-            assign POS
+        <Submit className="btn btn-outline btn-accent my-1 w-full max-w-xs" disabled={loading}>
+            {loading ? 'loading...' : "assign POS"}
           </Submit>
       </Form>
     </>
