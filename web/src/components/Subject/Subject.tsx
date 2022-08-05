@@ -145,7 +145,7 @@ const Subject = ({ subject }: Props) => {
             token: breaks.length > 0 ? breaks[1] : '',
             index: newIndex,
             sentenceId: subject.id,
-            pos: pos || '',
+            pos: pos || 'X',
           },
         },
       })
@@ -335,14 +335,14 @@ const Subject = ({ subject }: Props) => {
             <Submit
               className="btn btn-outline btn-accent w-full max-w-xs"
               disabled={
-                breaks.length > 0 &&
+                !loading && breaks.length > 0 &&
                 breaks[0].length > 0 &&
                 breaks[1].length > 0
                   ? false
                   : true
               }
             >
-              break Token
+              {loading ? "loading..." :"break Token"}
             </Submit>
           </Form>
 
