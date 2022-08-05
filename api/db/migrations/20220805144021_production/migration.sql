@@ -1,14 +1,16 @@
 -- CreateTable
 CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `phone_number` VARCHAR(191) NOT NULL,
+    `phone_number` VARCHAR(191) NOT NULL DEFAULT '',
     `email` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NULL,
-    `role` ENUM('STEMMER', 'VERIFIER', 'ANNOTATOR', 'INACTIVE', 'SUPER') NOT NULL DEFAULT 'INACTIVE',
-    `password` VARCHAR(191) NOT NULL,
+    `roles` ENUM('STEMMER', 'VERIFIER', 'ANNOTATOR', 'INACTIVE', 'SUPER') NOT NULL DEFAULT 'INACTIVE',
+    `hashedPassword` VARCHAR(191) NOT NULL DEFAULT '',
+    `salt` VARCHAR(191) NOT NULL DEFAULT '',
+    `resetToken` VARCHAR(191) NULL,
+    `resetTokenExpiresAt` DATETIME(3) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    UNIQUE INDEX `User_phone_number_key`(`phone_number`),
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -26,7 +28,7 @@ CREATE TABLE `Profile` (
 -- CreateTable
 CREATE TABLE `Sentence` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `sentence` VARCHAR(191) NOT NULL,
+    `sentence` VARCHAR(900) NOT NULL,
     `source` VARCHAR(191) NULL,
     `progress` ENUM('VERIFIED', 'PENDING_VERIFICATION', 'ANNOTATED', 'STEMMING', 'STEMMED', 'RAW') NOT NULL DEFAULT 'RAW',
     `uploaderID` INTEGER NULL,
@@ -40,7 +42,7 @@ CREATE TABLE `Token` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `token` VARCHAR(191) NOT NULL,
     `index` INTEGER NOT NULL,
-    `pos` VARCHAR(191) NULL,
+    `pos` ENUM('ADJ', 'ADP', 'ADV', 'AUX', 'CCONJ', 'DET', 'INTJ', 'NOUN', 'NUM', 'PART', 'PRON', 'PROPN', 'PUNCT', 'SCONJ', 'SYM', 'VERB', 'X') NULL,
     `head` INTEGER NULL,
     `deprel` VARCHAR(191) NULL,
     `sentenceId` INTEGER NOT NULL,

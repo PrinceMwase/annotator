@@ -1,6 +1,7 @@
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 generator client {
@@ -36,7 +37,7 @@ model Profile {
 
 model Sentence {
   id         Int      @id @default(autoincrement())
-  sentence   String
+  sentence   String   @db.VarChar(900)
   source     String?
   progress   PROGRESS @default(RAW)
   uploader   User?    @relation(fields: [uploaderID], references: [id])
