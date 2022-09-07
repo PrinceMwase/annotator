@@ -33,32 +33,32 @@ const Routes = () => {
 
       <Private unauthenticated="home">
         <Set wrap={UsersLayout}>
-          <Route path="/users/new" page={UserNewUserPage} name="newUser" />
+          <Route path="/private/users/new" page={UserNewUserPage} name="newUser" />
 
-          <Route path="/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
+          <Route path="/private/users/{id:Int}/edit" page={UserEditUserPage} name="editUser" />
 
-          <Route path="/users/{id:Int}" page={UserUserPage} name="user" />
+          <Route path="/private/users/{id:Int}" page={UserUserPage} name="user" />
 
-          <Route path="/users" page={UserUsersPage} name="users" />
+          <Route path="/private/users" page={UserUsersPage} name="users" />
         </Set>
         <Set wrap={TokensLayout}>
-          <Route path="/tokens/new" page={TokenNewTokenPage} name="newToken" />
-          <Route path="/tokens/{id:Int}/edit" page={TokenEditTokenPage} name="editToken" />
-          <Route path="/tokens/{id:Int}" page={TokenTokenPage} name="token" />
-          <Route path="/tokens" page={TokenTokensPage} name="tokens" />
+          <Route path="/private/tokens/new" page={TokenNewTokenPage} name="newToken" />
+          <Route path="/private/tokens/{id:Int}/edit" page={TokenEditTokenPage} name="editToken" />
+          <Route path="/private/tokens/{id:Int}" page={TokenTokenPage} name="token" />
+          <Route path="/private/tokens" page={TokenTokensPage} name="tokens" />
         </Set>
         <Set wrap={ProfilesLayout}>
-          <Route path="/profiles/new" page={ProfileNewProfilePage} name="newProfile" />
-          <Route path="/profiles/{id:Int}/edit" page={ProfileEditProfilePage} name="editProfile" />
-          <Route path="/profiles/{id:Int}" page={ProfileProfilePage} name="profile" />
-          <Route path="/profiles" page={ProfileProfilesPage} name="profiles" />
+          <Route path="/private/profiles/new" page={ProfileNewProfilePage} name="newProfile" />
+          <Route path="/private/profiles/{id:Int}/edit" page={ProfileEditProfilePage} name="editProfile" />
+          <Route path="/private/profiles/{id:Int}" page={ProfileProfilePage} name="profile" />
+          <Route path="/private/profiles" page={ProfileProfilesPage} name="profiles" />
         </Set>
 
         <Set wrap={SentencesLayout}>
-          <Route path="/sentences/new" page={SentenceNewSentencePage} name="newSentence" />
-          <Route path="/sentences/{id:Int}/edit" page={SentenceEditSentencePage} name="editSentence" />
-          <Route path="/sentences/{id:Int}" page={SentenceSentencePage} name="sentence" />
-          <Route path="/sentences" page={SentenceSentencesPage} name="sentences" />
+          <Route path="/private/sentences/new" page={SentenceNewSentencePage} name="newSentence" />
+          <Route path="/private/sentences/{id:Int}/edit" page={SentenceEditSentencePage} name="editSentence" />
+          <Route path="/private/sentences/{id:Int}" page={SentenceSentencePage} name="sentence" />
+          <Route path="/private/sentences" page={SentenceSentencesPage} name="sentences" />
         </Set>
       </Private>
 
