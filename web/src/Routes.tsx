@@ -31,7 +31,7 @@ const Routes = () => {
         <Route path="/" page={HomePage} name="home" />
       </Set>
 
-      <Private unauthenticated="home" roles="SUPER">
+      <Private unauthenticated="home">
         <Set wrap={UsersLayout}>
           <Route path="/users/new" page={UserNewUserPage} name="newUser" />
 
