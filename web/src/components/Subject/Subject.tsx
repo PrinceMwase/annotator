@@ -12,6 +12,9 @@ import {
   SubmitHandler,
 } from '@redwoodjs/forms'
 import { QUERY as SubjectQuery } from 'src/components/SubjectCell'
+import CountMyStemmedSubjectsCell, {
+  QUERY as CountSubjects,
+} from 'src/components/CountMyStemmedSubjectsCell'
 import { useMutation } from '@redwoodjs/web'
 import UposForm from 'src/components/UposForm/UposForm'
 import { useAuth } from '@redwoodjs/auth'
@@ -94,12 +97,9 @@ interface UpdateValues {
 }
 
 const Subject = ({ subject }: Props) => {
-
   // hook to verify for submission
   const [clickedBreak, setclickedBreak] = useState(false)
   const [clickedFinalize, setclickedFinalize] = useState(false)
-
-
 
   //the token's position on the sentence
   const [newIndex, setnewIndex] = useState(0)
@@ -109,7 +109,7 @@ const Subject = ({ subject }: Props) => {
       toast.success('submitted')
       setclickedFinalize(false)
     },
-    refetchQueries: [{ query: SubjectQuery }],
+    refetchQueries: [{ query: SubjectQuery }, { query: CountSubjects }],
   })
 
   const [createToken, { loading, error }] = useMutation(CREATE, {
@@ -133,7 +133,7 @@ const Subject = ({ subject }: Props) => {
       toast.success('updated token')
       setclickedFinalize(false)
     },
-    refetchQueries: [{ query: SubjectQuery }],
+    refetchQueries: [{ query: SubjectQuery }, { query: CountSubjects }],
   })
 
   const onSubmit: SubmitHandler<CreateValues> = (input) => {
@@ -156,8 +156,7 @@ const Subject = ({ subject }: Props) => {
   // set the sentence as stemmed
   const { isAuthenticated, currentUser } = useAuth()
   const finalize: SubmitHandler<CreateValues> = () => {
-
-    if(!clickedFinalize){
+    if (!clickedFinalize) {
       return setclickedFinalize(true)
     }
 
@@ -263,7 +262,7 @@ const Subject = ({ subject }: Props) => {
 
   return (
     <div>
-      <div className="card w-96 bg-base-100 shadow-xl">
+      <div className="card w-96 bg-base-100 mr-auto ml-auto shadow-xl">
         <div className="card-body">
           <div>
             {thisToken ? '' : sentence}
@@ -335,14 +334,15 @@ const Subject = ({ subject }: Props) => {
             <Submit
               className="btn btn-outline btn-accent w-full max-w-xs"
               disabled={
-                !loading && breaks.length > 0 &&
+                !loading &&
+                breaks.length > 0 &&
                 breaks[0].length > 0 &&
                 breaks[1].length > 0
                   ? false
                   : true
               }
             >
-              {loading ? "loading..." :"break Token"}
+              {loading ? 'loading...' : 'break Token'}
             </Submit>
           </Form>
 
@@ -357,9 +357,16 @@ const Subject = ({ subject }: Props) => {
 
           <Form className="my-5" onSubmit={finalize}>
             <Submit className="btn btn-outline w-full max-w-xs">
-              {clickedFinalize ? "Click again to verify" : "Submit"}
+              {clickedFinalize ? 'Click again to verify' : 'Submit'}
             </Submit>
           </Form>
+        </div>
+        <div className="stats stats-vertical shadow">
+          <div className="stat">
+            <div className="stat-title">
+              Submitted <CountMyStemmedSubjectsCell /> Sentence(s)
+            </div>
+          </div>
         </div>
       </div>
     </div>

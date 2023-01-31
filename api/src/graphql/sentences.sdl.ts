@@ -20,9 +20,14 @@ export const schema = gql`
     RAW
   }
 
+  type SentenceCount{
+    _all: Int
+  }
+
   type Query {
     sentences: [Sentence!]! @requireAuth
     subject: Sentence @requireAuth
+    countMyStemmedSubjects: SentenceCount @requireAuth
     sentence(id: Int!): Sentence @requireAuth
   }
 

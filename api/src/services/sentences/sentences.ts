@@ -48,6 +48,18 @@ export const subject = () => {
 
 }
 
+export const countMyStemmedSubjects: QueryResolvers['countMyStemmedSubjects'] = () => {
+  return db.sentence.count({
+    where: {
+      modifierId: context.currentUser.id,
+      progress: "STEMMED"
+    },
+    select : {
+      _all: true
+    }
+  })
+}
+
 export const createSentence: MutationResolvers['createSentence'] = ({
   input,
 }) => {
