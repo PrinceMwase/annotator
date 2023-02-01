@@ -267,7 +267,7 @@ const Subject = ({ subject }: Props) => {
           <div>
             {thisToken ? '' : sentence}
             <span>{leftword}</span>
-            <span className="text-purple-600 dark:text-yellow-400 mx-2 indicator">
+            <span className="text-purple-600 dark:text-yellow-400 font-bold text-xl mx-2 indicator">
               {word}
               <span className="indicator-item badge badge-primary">
                 {pos || ''}
